@@ -1,5 +1,5 @@
 from database import conectar
-
+from sqlite3 import Error
 
 
 def criar_tabela_tarefas():
@@ -16,3 +16,21 @@ def criar_tabela_tarefas():
     """)
     conn.commit()
     conn.close()
+
+
+
+def criar_tarefa(titulo, descricao, concluida=0):
+    conn = conectar()
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("INSERT INTO tarefas(titulo, descricao, concluida) VALUES (?,?,?)", 
+                       (titulo, descricao, concluida))
+        conn.commit()
+        return True
+    except Error as e:
+        print(e)
+        return None
+    finally:
+        conn.close()
+
