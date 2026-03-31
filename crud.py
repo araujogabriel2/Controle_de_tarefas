@@ -34,3 +34,38 @@ def criar_tarefa(titulo, descricao, concluida=0):
     finally:
         conn.close()
 
+def ler_tarefa():
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("SELECT * FROM tarefas")
+        dados = cursor.fetchall()
+
+        return [dict(dado) for dado in dados]
+    
+    except Error as e:
+        print(e)
+        return None
+    finally:
+        conn.close()
+
+def ler_tarefa_por_id(id):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("SELECT * FROM tarefas WHERE id = ?", (id, ))
+        dado = cursor.fetchone()
+
+        if dado is None:
+            return False
+
+        return dict(dado)
+    
+    except Error as e:
+        print(e)
+        return None
+    finally:
+        conn.close()
+
